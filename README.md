@@ -2,9 +2,11 @@
 
 An [Alfred 3](https://www.alfredapp.com/) workflow for searching song lyrics on [Genius](https://genius.com/).
 
+![alfred-genius](https://i.imgur.com/FDacgV8.png)
+
 ## Installation
 
-[Download](https://github.com/goronfreeman/alfred-genius/releases) the latest `Genius.alfredworkflow` file and double click it to install.
+[Download](https://github.com/goronfreeman/alfred-genius/releases/latest) the latest `Genius.alfredworkflow` file and double click it to install.
 
 ## Setup
 
