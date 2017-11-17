@@ -1,5 +1,5 @@
-require 'httparty/logger/apache_formatter'
-require 'httparty/logger/curl_formatter'
+require_relative 'apache_formatter'
+require_relative 'curl_formatter'
 
 module HTTParty
   module Logger

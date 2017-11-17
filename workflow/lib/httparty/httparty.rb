@@ -3,16 +3,16 @@ require 'net/http'
 require 'net/https'
 require 'uri'
 require 'zlib'
-require 'multi_xml'
+require_relative '../multi_xml/multi_xml'
 require 'json'
 require 'csv'
 
-require 'httparty/module_inheritable_attributes'
-require 'httparty/cookie_hash'
-require 'httparty/net_digest_auth'
-require 'httparty/version'
-require 'httparty/connection_adapter'
-require 'httparty/logger/logger'
+require_relative 'httparty/module_inheritable_attributes'
+require_relative 'httparty/cookie_hash'
+require_relative 'httparty/net_digest_auth'
+require_relative 'httparty/version'
+require_relative 'httparty/connection_adapter'
+require_relative 'httparty/logger/logger'
 
 # @see HTTParty::ClassMethods
 module HTTParty
@@ -634,8 +634,8 @@ module HTTParty
   end
 end
 
-require 'httparty/hash_conversions'
-require 'httparty/exceptions'
-require 'httparty/parser'
-require 'httparty/request'
-require 'httparty/response'
+require_relative 'httparty/hash_conversions'
+require_relative 'httparty/exceptions'
+require_relative 'httparty/parser'
+require_relative 'httparty/request'
+require_relative 'httparty/response'

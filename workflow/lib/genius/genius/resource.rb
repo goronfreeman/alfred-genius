@@ -1,4 +1,4 @@
-require 'httparty'
+require_relative '../../httparty/httparty'
 
 module Genius
   class Resource

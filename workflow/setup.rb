@@ -1,5 +1,4 @@
-$LOAD_PATH << '.'
-require 'base'
+require_relative 'base'
 
 module AlfredGenius
   class Setup
@@ -19,7 +18,7 @@ module AlfredGenius
     private
 
     def save_token
-      file_path = "#{@@dir_path}/settings.yml"
+      file_path = "#{Base.dir_path}/settings.yml"
       FileUtils.touch(file_path) unless File.exist?(file_path)
       config = YAML.load_file(file_path) || {}
 
@@ -28,15 +27,15 @@ module AlfredGenius
     end
 
     def output_json
-      @@workflow.result
-                .title(token)
-                .subtitle('Set Genius Access Token')
-                .type('default')
-                .valid(true)
-                .icon('img/icon.png')
-                .arg('https://genius.com/api-clients/new')
+      Base.workflow.result
+          .title(token)
+          .subtitle('Set Genius Access Token')
+          .type('default')
+          .valid(true)
+          .icon('img/icon.png')
+          .arg('https://genius.com/api-clients/new')
 
-      print @@workflow.output
+      print Base.workflow.output
     end
   end
 end

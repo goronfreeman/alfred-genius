@@ -1,12 +1,12 @@
-require "genius/version"
-require "genius/errors"
-require "genius/resource"
-require "genius/artist"
-require "genius/song"
-require "genius/web_page"
-require "genius/account"
-require "genius/annotation"
-require "genius/referent"
+require_relative "genius/version"
+require_relative "genius/errors"
+require_relative "genius/resource"
+require_relative "genius/artist"
+require_relative "genius/song"
+require_relative "genius/web_page"
+require_relative "genius/account"
+require_relative "genius/annotation"
+require_relative "genius/referent"
 
 module Genius
   class << self

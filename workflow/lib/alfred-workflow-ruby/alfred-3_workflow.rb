@@ -1,4 +1,4 @@
-require 'result'
+require_relative 'result'
 require 'json'
 
 module Alfred3

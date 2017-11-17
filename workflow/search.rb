@@ -1,5 +1,4 @@
-$LOAD_PATH << '.'
-require 'base'
+require_relative 'base'
 
 require 'open-uri'
 
@@ -10,68 +9,78 @@ module AlfredGenius
     attr_reader :query
 
     def initialize
-      @query = ARGV[0]
+      @query = ARGV.join(' ')
     end
 
     def search
       set_access_token
-      output_json(Genius::Song.search(query))
+      output_json
     rescue
       rescue_json
     ensure
-      print @@workflow.output
+      print Base.workflow.output
     end
 
     private
 
     def set_access_token
-      config = YAML.load_file("#{@@dir_path}/settings.yml")
+      config = YAML.load_file("#{Base.dir_path}/settings.yml")
       Genius.access_token = config['access_token']
     end
 
-    def output_json(songs)
+    def output_json
       return generic_json if query.length < 4
+      songs = Genius::Song.search(query)
+      return no_match_json if songs.empty?
       songs.each { |song| results_json(song) }
     end
 
     def results_json(song)
-      full_title = song.resource['full_title']
+      full_title     = song.resource['full_title']
       primary_artist = song.primary_artist
-      cache_path = "#{@@home_path}/Library/Caches/com.runningwithcrayons.Alfred-3/extensions_tmp"
-      art_path = "#{cache_path}/#{song.id}.png"
-      song_art = File.exist?(art_path) ? art_path : download_art(song, cache_path, art_path)
+      song_art       = find_art(song)
 
-      @@workflow.result
-                .uid(song.id)
-                .title(song.title)
-                .subtitle(primary_artist.name)
-                .quicklookurl(song.url)
-                .type('default')
-                .arg(song.url)
-                .valid(true)
-                .icon(song_art)
-                .mod('cmd', 'View artist on Genius', primary_artist.url)
-                .mod('alt', "Search for #{full_title}", "https://www.google.com/search?q=#{full_title}")
-                .text('copy', song.url)
+      Base.workflow.result
+          .uid(song.id)
+          .title(song.title)
+          .subtitle(primary_artist.name)
+          .quicklookurl(song.url)
+          .arg(song.url)
+          .icon(song_art)
+          .mod('cmd', 'View artist on Genius', primary_artist.url)
+          .mod('alt', "Search for #{full_title}", "https://www.google.com/search?q=#{full_title}")
+          .text('copy', song.url)
+          .autocomplete(song.title)
+    end
+
+    def no_match_json
+      Base.workflow.result
+          .title('No matches found!')
+          .subtitle('Try a different search term')
+          .valid(false)
+          .icon('img/not-found.png')
     end
 
     def generic_json
-      @@workflow.result
-                .title('Be more specific 🤔')
-                .subtitle('Enter 3 or more characters to narrow your search')
-                .type('default')
-                .valid(false)
-                .icon('img/not-found.png')
+      Base.workflow.result
+          .title('Be more specific 🤔')
+          .subtitle('Enter 3 or more characters to narrow your search')
+          .valid(false)
+          .icon('img/not-found.png')
     end
 
     def rescue_json
-      @@workflow.result
-                .title('Genius is not set up yet!')
-                .subtitle('Press Enter to begin the setup process')
-                .type('default')
-                .arg('https://genius.com/api-clients/new')
-                .valid(true)
-                .icon('img/not-found.png')
+      Base.workflow.result
+          .title('Genius is not set up yet!')
+          .subtitle('Press Enter to begin the setup process')
+          .arg('https://genius.com/api-clients/new')
+          .icon('img/not-found.png')
+    end
+
+    def find_art(song)
+      cache_path = "#{Base.home_path}/Library/Caches/com.runningwithcrayons.Alfred-3/extensions_tmp"
+      art_path   = "#{cache_path}/#{song.id}.png"
+      File.exist?(art_path) ? art_path : download_art(song, cache_path, art_path)
     end
 
     def download_art(song, cache_path, art_path)
